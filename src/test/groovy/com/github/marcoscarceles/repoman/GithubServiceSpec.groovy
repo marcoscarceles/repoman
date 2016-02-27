@@ -9,8 +9,6 @@ import spock.lang.Specification
 @TestFor(GithubService)
 class GithubServiceSpec extends Specification {
 
-    def grailsApplication
-
     def setup() {
     }
 

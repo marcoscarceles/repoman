@@ -128,3 +128,4 @@ repoman:
         username:   "${GITHUB_USERNAME}"
         password:   "${GITHUB_PASSWORD}"
         token:      "${GITHUB_TOKEN}"
+        throttling: 5000

@@ -53,6 +53,7 @@ class GithubService {
                 ]}
                 nextUrl = getNext(response)
             } else {
+                log.warn("Unable to fetch ${nextUrl}, due to ${response.status} : ${response.statusText}")
                 nextUrl = null
             }
             return orgs
