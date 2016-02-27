@@ -16,6 +16,17 @@ class GithubService {
         new OrganizationIterator()
     }
 
+    Map getOrganization(String name) {
+        Map details = [:]
+        HttpResponse<String> response = Unirest.get(API_HOME+'/orgs/'+name)
+                .header('Authorization', "token ${token}")
+                .asString()
+        if(response.status == 200) {
+            details = getOrgDetails(response.body)
+        }
+        details
+    }
+
     protected String getNext(HttpResponse<?> response) {
         String next = response.headers.link.find {
             it =~ /rel="next"/
@@ -44,13 +55,7 @@ class GithubService {
             }
             HttpResponse<String> response = Unirest.get(nextUrl).header('Authorization', "token ${token}").asString()
             if(response.status == 200) {
-                orgs = JSON.parse(response.body).collect {[
-                        url: it.url,
-                        name: it.url.split('/').last(),
-                        description: it.description,
-                        repos: it.repos_url,
-                        avatar: it.avatar_url
-                ]}
+                orgs = JSON.parse(response.body).collect { getOrgDetails(it) }
                 nextUrl = getNext(response)
             } else {
                 log.warn("Unable to fetch ${nextUrl}, due to ${response.status} : ${response.statusText}")
@@ -58,5 +63,19 @@ class GithubService {
             }
             return orgs
         }
+    }
+
+    private Map getOrgDetails(String json) {
+        getOrgDetails(JSON.parse(json))
+    }
+
+    private Map getOrgDetails(def json) {
+        [
+                url: json.url,
+                name: json.login,
+                description: json.description,
+                repos: json.repos_url,
+                avatar: json.avatar_url
+        ]
     }
 }

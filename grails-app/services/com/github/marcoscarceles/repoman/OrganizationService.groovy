@@ -9,6 +9,17 @@ class OrganizationService {
     GithubService githubService
     GrailsApplication grailsApplication
 
+    Organization get(String name) {
+        Organization org = Organization.findByName(name)
+        if(!org) {
+            Map details = githubService.getOrganization(name)
+            if(details) {
+                org = new Organization(details).save()
+            }
+        }
+        return org
+    }
+
     int saveAllOrganizations() {
         Iterator<List<Map>> orgs = githubService.allOrganizations
         log.debug 'Iterating over Organizations ...'
