@@ -1,4 +1,4 @@
-package com.marcoscarceles.github.repoman
+package com.github.marcoscarceles.repoman
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification

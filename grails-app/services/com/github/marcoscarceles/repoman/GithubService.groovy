@@ -1,4 +1,4 @@
-package com.marcoscarceles.github.repoman
+package com.github.marcoscarceles.repoman
 
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
