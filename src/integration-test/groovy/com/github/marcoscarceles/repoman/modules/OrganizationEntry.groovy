@@ -8,9 +8,7 @@ import geb.Module
 class OrganizationEntry extends Module {
 
     static content = {
-        name { $('td.nth-child(0)') }
-        url { $('td.nth-child(1)') }
-        avatar { $('td.nth-child(2)') }
-        repos { $('td.nth-child(3)') }
+        avatar { $('td:nth-child(1) img') }
+        name { $('td:nth-child(2)').text() }
     }
 }

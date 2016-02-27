@@ -4,10 +4,12 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
 waiting {
-    timeout = 2
+    timeout = 5
 }
 driver = {
-    new PhantomJSDriver(new DesiredCapabilities())
+//    new PhantomJSDriver(new DesiredCapabilities())
+    new ChromeDriver()
+
 }
 environments {
     // run as “grails -Dgeb.env=chrome test-app”

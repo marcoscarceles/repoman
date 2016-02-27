@@ -27,6 +27,30 @@ class GithubService {
         details
     }
 
+    List<Map> getRepos(String owner) {
+        List<Map> repos
+        HttpResponse<String> response = Unirest.get(API_HOME+"/orgs/${owner}/repos")
+                .header('Authorization', "token ${token}")
+                .asString()
+        if(response.status == 200) {
+            repos = JSON.parse(response.body).collect {
+                getRepoDetails(it)
+            }
+        }
+        repos
+    }
+
+    Map getRepo(String owner, String name) {
+        Map details = [:]
+        HttpResponse<String> response = Unirest.get(API_HOME+"/repos/${owner}/${name}")
+                .header('Authorization', "token ${token}")
+                .asString()
+        if(response.status == 200) {
+            details = getRepoDetails(response.body)
+        }
+        details
+    }
+
     protected String getNext(HttpResponse<?> response) {
         String next = response.headers.link.find {
             it =~ /rel="next"/
@@ -74,8 +98,16 @@ class GithubService {
                 url: json.url,
                 name: json.login,
                 description: json.description,
-                repos: json.repos_url,
                 avatar: json.avatar_url
+        ]
+    }
+
+    private Map getRepoDetails(def json) {
+        [
+                owner: json.owner.login,
+                name: json.name,
+                stargazers: json.stargazers_count,
+                forks: json.forks_count,
         ]
     }
 }

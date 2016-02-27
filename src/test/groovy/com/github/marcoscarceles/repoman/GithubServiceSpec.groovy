@@ -9,6 +9,8 @@ import spock.lang.Specification
 @TestFor(GithubService)
 class GithubServiceSpec extends Specification {
 
+    //TODO: Use Betamax
+
     def setup() {
     }
 
@@ -42,4 +44,8 @@ class GithubServiceSpec extends Specification {
         and:
         secondPage.size() == GITHUB_PAGE_SIZE
     }
+
+    //TODO: Test fetch an Org
+
+    //Todo: Test fetch a Repo
 }

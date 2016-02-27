@@ -5,12 +5,15 @@ class Organization {
     String name
     String url
     String avatar
-    String repos
+
+    List<Repo> repos
+
+    static hasMany = [repos:Repo]
 
     static constraints = {
-        name unique:true
-        url unique:true
         avatar unique:true
-        repos unique:true
+        name unique:true
+        url display: false, unique:true
+        repos display: false
     }
 }

@@ -1,10 +1,8 @@
 package com.github.marcoscarceles.repoman
 
-import com.github.marcoscarceles.repoman.pages.OrganizationList
+import com.github.marcoscarceles.repoman.pages.OrganizationListPage
 import grails.test.mixin.integration.Integration
 import grails.transaction.*
-
-import spock.lang.*
 import geb.spock.*
 
 /**
@@ -25,7 +23,7 @@ class OrganizationGebSpec extends GebSpec {
         Thread.sleep(5000)
 
         when:
-        to OrganizationList
+        to OrganizationListPage
         then:
         organizations.size() > 0
     }

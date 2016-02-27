@@ -6,93 +6,23 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class OrganizationController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    OrganizationService organizationService
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Organization.list(params), model:[organizationCount: Organization.count()]
     }
 
-    def show(Organization organization) {
-        respond organization
-    }
-
-    def create() {
-        respond new Organization(params)
-    }
-
-    @Transactional
-    def save(Organization organization) {
-        if (organization == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (organization.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond organization.errors, view:'create'
-            return
-        }
-
-        organization.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'organization.label', default: 'Organization'), organization.id])
-                redirect organization
+    def show(String id) {
+        Organization org = organizationService.get(id)
+        if(org && params.sort && params.order) {
+            //Reordering on the Domain itself? Thank god this is only a test project ...
+            int order = params.order == 'asc' ? 1 : -1
+            org.repos = org.repos.sort { Repo a, Repo b ->
+                (a[params.sort] <=> b[params.sort]) * order
             }
-            '*' { respond organization, [status: CREATED] }
         }
-    }
-
-    def edit(Organization organization) {
-        respond organization
-    }
-
-    @Transactional
-    def update(Organization organization) {
-        if (organization == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (organization.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond organization.errors, view:'edit'
-            return
-        }
-
-        organization.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'organization.label', default: 'Organization'), organization.id])
-                redirect organization
-            }
-            '*'{ respond organization, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Organization organization) {
-
-        if (organization == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        organization.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'organization.label', default: 'Organization'), organization.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+        respond org
     }
 
     protected void notFound() {

@@ -1,0 +1,7 @@
+.icon-logoUpdate {
+    font-family: nf-icon;
+}
+
+.icon-logoUpdate:before {
+    content: '\e5d0';
+}

@@ -17,7 +17,19 @@ class OrganizationService {
                 org = new Organization(details).save()
             }
         }
+
+        if(!org.repos) {
+            org.repos = getRepos(name)
+            org.save()
+        }
+
         return org
+    }
+
+    List<Repo> getRepos(String owner) {
+        githubService.getRepos(owner).collect {
+            new Repo(it)
+        }
     }
 
     int saveAllOrganizations() {

@@ -13,3 +13,8 @@
 *= require mobile
 *= require_self
 */
+
+.avatar {
+    height: 4em;
+    border-radius: 50%;
+}
