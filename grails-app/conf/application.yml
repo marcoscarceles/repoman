@@ -120,3 +120,11 @@ grails:
 endpoints:
     jmx:
         unique-names: true
+
+---
+#Repoman specific config
+repoman:
+    github:
+        username:   "${GITHUB_USERNAME}"
+        password:   "${GITHUB_PASSWORD}"
+        token:      "${GITHUB_TOKEN}"

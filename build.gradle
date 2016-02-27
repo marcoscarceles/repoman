@@ -60,6 +60,9 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    //Unirest
+    compile "com.mashape.unirest:unirest-java:1.4.7"
 }
 
 task wrapper(type: Wrapper) {
