@@ -14,5 +14,5 @@ Use one of the following environment variables combinations to integrate with Gi
  * Token based (Useful for development)
    * `GITHUB_TOKEN` : A valid Github OAuth Token (available for development via https://github.com/settings/tokens/new)
  * User based (Useful for development)
- * `GITHUB_USERNAME`
- * `GITHUB_PASSWORD`
+   * `GITHUB_USERNAME`
+   * `GITHUB_PASSWORD`
