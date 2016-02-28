@@ -1,5 +1,10 @@
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.FileAppender
 import grails.util.BuildSettings
 import grails.util.Environment
+
+import static ch.qos.logback.classic.Level.*
 
 // See http://logback.qos.ch/manual/groovy.html for details on configuration
 appender('STDOUT', ConsoleAppender) {
@@ -20,6 +25,7 @@ if (Environment.isDevelopmentMode() && targetDir) {
         }
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
+    logger("grails.app.services.com.github.marcoscarceles.repoman", DEBUG, ["STDOUT"])
 } else {
     logger("grails.app.services.com.github.marcoscarceles.repoman", INFO, ["STDOUT"])
 }

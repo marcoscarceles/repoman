@@ -78,7 +78,7 @@ class GithubService {
         getConfig('clientID', /GITHUB_CLIENTID/)
     }
     String getSecret() {
-        getConfig('clientID', /GITHUB_SECRET/)
+        getConfig('secret', /GITHUB_SECRET/)
     }
     String getUsername() {
         getConfig('username', /GITHUB_USERNAME/)
