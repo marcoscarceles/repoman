@@ -7,6 +7,7 @@ import geb.spock.GebSpec
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import spock.lang.Stepwise
+import spock.lang.Unroll
 
 /**
  * Created by @marcos-carceles on 27/02/2016.
@@ -30,18 +31,21 @@ class E2ESpec extends GebSpec {
         organizations[0].name == 'Netflix'
     }
 
+    @Unroll
     void "can access an Organization"() {
-        expect:
-        at OrganizationListPage
+        given:
+        to OrganizationListPage
 
         when:
-        choose('Netflix').avatar.click()
+        def entry = choose(organization)
+        String entryName = entry.name
+        entry.avatar.click()
 
         then:
         at OrganizationPage
 
         and:
-        name == 'Netflix'
+        name == entryName
         repos.displayed
 
         when:
@@ -61,6 +65,9 @@ class E2ESpec extends GebSpec {
             at(OrganizationPage) &&
             repos[0].popularity == repos*.popularity.max()
         }
+
+        where:
+        organization << [1, 2, 'Netflix']
     }
 
     void "can show a Repo"() {
