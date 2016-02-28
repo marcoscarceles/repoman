@@ -5,6 +5,8 @@ import com.mashape.unirest.http.Unirest
 import grails.converters.JSON
 import grails.transaction.Transactional
 
+import java.nio.file.Paths
+
 @Transactional
 class GithubService {
 
@@ -17,47 +19,34 @@ class GithubService {
     }
 
     Map getOrganization(String name) {
-        Map details = [:]
-        HttpResponse<String> response = Unirest.get(API_HOME+'/orgs/'+name)
-                .header('Authorization', "token ${token}")
-                .asString()
-        if(response.status == 200) {
-            details = getOrgDetails(response.body)
-        }
-        details
+        get(getOrgDetails, 'orgs', name)
     }
 
     List<Map> getRepos(String owner) {
-        List<Map> repos
-        HttpResponse<String> response = Unirest.get(API_HOME+"/orgs/${owner}/repos")
-                .header('Authorization', "token ${token}")
-                .asString()
-        if(response.status == 200) {
-            repos = JSON.parse(response.body).collect getRepoDetails
-        }
-        repos
+        get(getRepoDetails, 'orgs', owner, 'repos')
     }
 
     Map getRepo(String owner, String name) {
-        Map details = [:]
-        HttpResponse<String> response = Unirest.get(API_HOME+"/repos/${owner}/${name}")
-                .header('Authorization', "token ${token}")
-                .asString()
-        if(response.status == 200) {
-            details = getRepoDetails(response.body)
-        }
-        details
+        get(getRepoDetails, 'repos', owner, name)
     }
 
     List<Map> getCommits(String owner, String name) {
-        List<Map> commits = []
-        HttpResponse<String> response = Unirest.get(API_HOME+"/repos/${owner}/${name}/commits")
+        get(getCommitDetails, 'repos', owner, name, 'commits')
+    }
+
+    private <T> T get(Closure<T> parsingClosure, String type, String ... path) {
+        T value
+        String url = API_HOME +'/'+ Paths.get(type, path).toString()
+        HttpResponse<String> response = Unirest.get(url)
                 .header('Authorization', "token ${token}")
                 .asString()
         if(response.status == 200) {
-            commits = JSON.parse(response.body).collect getCommitDetails
+            def body = JSON.parse(response.body)
+            value = body instanceof List ? body.collect(parsingClosure) : parsingClosure.call(body)
+        } else {
+            log.warning "Unable to fetch ${url}, response ${response.status} : ${response.statusText}"
         }
-        commits
+        return value
     }
 
     protected String getNext(HttpResponse<?> response) {
@@ -99,7 +88,6 @@ class GithubService {
     }
 
     private Closure<Map> getOrgDetails = { json ->
-        json = json instanceof String ? JSON.parse(json) : json
         [
                 'url': json.url,
                 'name': json.login,
@@ -109,7 +97,6 @@ class GithubService {
     }
 
     private Closure<Map> getRepoDetails = { json ->
-        json = json instanceof String ? JSON.parse(json) : json
         [
                 'owner': json.owner.login,
                 'name': json.name,

@@ -13,9 +13,7 @@ waiting {
     }
 }
 driver = {
-//    new PhantomJSDriver(new DesiredCapabilities())
     new ChromeDriver()
-
 }
 environments {
     // run as “grails -Dgeb.env=chrome test-app”
