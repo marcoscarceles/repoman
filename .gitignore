@@ -58,3 +58,5 @@ gradle-app.setting
 ### Repoman Bespoke
 phantomjsdriver.log
 .asscache
+
+.DS_Store
