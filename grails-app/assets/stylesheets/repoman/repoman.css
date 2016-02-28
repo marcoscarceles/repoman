@@ -13,3 +13,10 @@ body {
     padding: 1em;
     font-size: 2em;
 }
+
+@media (max-width: 480px) { /*ohOH... mixing min and max*/
+    img.avatar {
+        display: block;
+        margin: 0 auto;
+    }
+}

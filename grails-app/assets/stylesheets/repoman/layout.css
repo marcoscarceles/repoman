@@ -14,6 +14,8 @@
 .main.content {
     background-color: #fff ;
     text-align: center;
+    box-shadow: 0 0 2em #888888;
+    border-radius: 0.5em;
 }
 
 @media (min-width: 768px) {
