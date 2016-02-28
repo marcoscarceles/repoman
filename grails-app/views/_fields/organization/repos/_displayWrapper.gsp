@@ -1,1 +1,0 @@
-<f:table collection="${bean.repos}" properties="${['name','popularity']}"/>

@@ -11,7 +11,7 @@ class OrganizationListPage extends Page {
     static url = 'organization/index'
 
     static at = {
-        title == "Organization List"
+        title == "Organization List | RepoMan"
     }
 
     static content = {

@@ -45,7 +45,7 @@ class E2ESpec extends GebSpec {
         repos.displayed
 
         when:
-            sortByPopularity.click()
+        sortByPopularity.click()
 
         then:
         waitFor {
@@ -67,6 +67,7 @@ class E2ESpec extends GebSpec {
         expect:
         at OrganizationPage
         repos[0].popularity == repos*.popularity.max()
+        def listPopularity = repos[0].popularity
 
         when:
         repos[0].link.click()
@@ -76,7 +77,7 @@ class E2ESpec extends GebSpec {
 
         and:
         name == 'Netflix/Hystrix'
-        popularity == old(repos[0].popularity)
+        popularity == listPopularity //old(repos[0].popularity), but this navigator is no longer available
 
         and:
         commits.size() == 30

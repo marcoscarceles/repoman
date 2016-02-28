@@ -3,11 +3,11 @@
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'organization.label', default: 'Organization')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title>Organization List | RepoMan</title>
     </head>
     <body>
         <div id="list-organization" class="content scaffold-list" role="main">
-            <h1><g:message code="default.list.label" args="[entityName]" /></h1>
+            <h1>Organization List</h1>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>

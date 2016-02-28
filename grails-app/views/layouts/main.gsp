@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>
-        <g:layoutTitle default="Grails"/>
+        <g:layoutTitle default="RepoMan"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
@@ -25,7 +25,7 @@
                 </button>
                 <a class="navbar-brand" href="/#">
                     <i class="fa grails-icon">
-                        <asset:image src="grails-cupsonly-logo-white.svg"/>
+                        <asset:image src="git-icon.svg"/>
                     </i> RepoMan
                 </a>
             </div>
@@ -37,7 +37,11 @@
         </div>
     </div>
 
-    <g:layoutBody/>
+    <div class="main container">
+        <div class="main content">
+            <g:layoutBody/>
+        </div>
+    </div>
 
     <div class="footer" role="contentinfo"></div>
 

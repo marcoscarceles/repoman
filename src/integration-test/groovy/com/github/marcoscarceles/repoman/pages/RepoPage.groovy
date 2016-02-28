@@ -11,12 +11,12 @@ class RepoPage extends Page {
     static url = 'repo/show'
 
     static at = {
-        title == 'Show Repo'
+        title =~ / Repo | RepoMan$/
     }
 
     static content = {
-        name { $('dd.name').text() }
-        popularity { $('dd.popularity').text() }
-        commits { moduleList CommitEntry, $('dd.commits tbody tr') }
+        name { $('h1').text() }
+        popularity { $('h2.popularity-value').text() as int }
+        commits { moduleList CommitEntry, $('#show-repo tbody tr') }
     }
 }

@@ -1,0 +1,28 @@
+.navbar-static-top, .footer {
+    position: fixed;
+    width: 100%;
+}
+
+.footer {
+    bottom: 0px;
+}
+
+.main.container {
+    padding: 8em 4em;
+}
+
+.main.content {
+    background-color: #fff ;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .main.container {
+        width: 750px;
+    }
+}
+@media (min-width: 992px) {
+    .main.container {
+        width: 970px;
+    }
+}

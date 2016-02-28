@@ -12,13 +12,13 @@ class OrganizationPage extends Page {
     static url = 'organization/show'
 
     static at = {
-        title == 'Show Organization'
+        title =~ / Organization | RepoMan$/
     }
 
     static content = {
-        name { $('[aria-labelledby="name-label"]').text() }
-        repos { moduleList RepoEntry, $('[aria-labelledby="repos-label"] tbody tr') }
-        sortByName { $('thead tr .sortable:nth-child(2)') }
-        sortByPopularity { $('thead tr .sortable:nth-child(2)') }
+        name { $('h1').text() }
+        repos { moduleList RepoEntry, $('#show-organization tbody tr') }
+        sortByName { $('#show-organization thead tr .sortable:nth-child(1)') }
+        sortByPopularity { $('#show-organization thead tr .sortable:nth-child(2)') }
     }
 }

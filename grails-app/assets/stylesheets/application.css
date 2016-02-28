@@ -11,10 +11,6 @@
 *= require grails
 *= require main
 *= require mobile
+*= require_tree repoman
 *= require_self
 */
-
-.avatar {
-    height: 4em;
-    border-radius: 50%;
-}

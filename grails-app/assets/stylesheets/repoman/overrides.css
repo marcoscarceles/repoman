@@ -1,0 +1,12 @@
+.navbar-default, .navbar-static-top {
+    background-color: #184D86;
+    border: 0px;
+}
+
+th:hover, tr:hover {
+    background: #4c79b9;
+}
+
+.footer {
+    background: #184D86;
+}
