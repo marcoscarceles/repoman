@@ -6,6 +6,7 @@ class Repo {
     String name
     int stargazers
     int forks
+    List<Commit> commits
 
     String getFullName() {
         "$owner/$name"
@@ -28,7 +29,7 @@ class Repo {
         ['org':owner]
     }
 
-    static transients = ['popularity', 'fullName', 'linkParameters']
+    static transients = ['popularity', 'fullName', 'linkParameters', 'commits']
 
     static constraints = {
         owner display:false

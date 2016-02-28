@@ -16,6 +16,8 @@ class RepoService {
         if(!repo) {
             repo = new Repo(githubService.getRepo(owner, name)).save()
         }
+        repo.commits = githubService.getCommits(owner, name).collect { new Commit(it) }
+
         return repo
     }
 }

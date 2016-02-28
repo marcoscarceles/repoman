@@ -1,5 +1,6 @@
 package com.github.marcoscarceles.repoman.pages
 
+import com.github.marcoscarceles.repoman.modules.CommitEntry
 import geb.Page
 
 /**
@@ -14,7 +15,8 @@ class RepoPage extends Page {
     }
 
     static content = {
-        repoOwner { $('[aria-labelledby="owner-label"]').text() }
-        name { $('[aria-labelledby="name-label"]').text() }
+        name { $('dd.name').text() }
+        popularity { $('dd.popularity').text() }
+        commits { moduleList CommitEntry, $('dd.commits tbody tr') }
     }
 }

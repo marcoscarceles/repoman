@@ -16,12 +16,17 @@ import spock.lang.Stepwise
 @Rollback
 class E2ESpec extends GebSpec {
 
-    void "can see the Organizations"() {
+    void "can see the (automatically loaded) Organizations"() {
         when:
-        to OrganizationListPage
+        via OrganizationListPage
 
         then:
-        organizations.size() == 10
+        waitFor('slow') {
+            to OrganizationListPage
+            organizations.size() == 10
+        }
+
+        and:
         organizations[0].name == 'Netflix'
     }
 
@@ -40,7 +45,7 @@ class E2ESpec extends GebSpec {
         repos.displayed
 
         when:
-        sortByPopularity.click()
+            sortByPopularity.click()
 
         then:
         waitFor {
@@ -70,7 +75,10 @@ class E2ESpec extends GebSpec {
         at RepoPage
 
         and:
-        repoOwner == 'Netflix'
-        name == 'Hystrix'
+        name == 'Netflix/Hystrix'
+        popularity == old(repos[0].popularity)
+
+        and:
+        commits.size() == 30
     }
 }

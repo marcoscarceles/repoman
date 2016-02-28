@@ -10,6 +10,13 @@ class RepoController {
 
     def show(String org, String id) {
         Repo repo = repoService.get(org, id)
+        if(repo && params.sort && params.order) {
+            //Reordering on the Domain itself? Thank god this is only a test project ...
+            int order = params.order == 'asc' ? 1 : -1
+            repo.commits = repo.commits.sort { Commit a, Commit b ->
+                (a[params.sort] <=> b[params.sort]) * order
+            }
+        }
         respond repo
     }
 

@@ -33,9 +33,7 @@ class GithubService {
                 .header('Authorization', "token ${token}")
                 .asString()
         if(response.status == 200) {
-            repos = JSON.parse(response.body).collect {
-                getRepoDetails(it)
-            }
+            repos = JSON.parse(response.body).collect getRepoDetails
         }
         repos
     }
@@ -49,6 +47,17 @@ class GithubService {
             details = getRepoDetails(response.body)
         }
         details
+    }
+
+    List<Map> getCommits(String owner, String name) {
+        List<Map> commits = []
+        HttpResponse<String> response = Unirest.get(API_HOME+"/repos/${owner}/${name}/commits")
+                .header('Authorization', "token ${token}")
+                .asString()
+        if(response.status == 200) {
+            commits = JSON.parse(response.body).collect getCommitDetails
+        }
+        commits
     }
 
     protected String getNext(HttpResponse<?> response) {
@@ -79,7 +88,7 @@ class GithubService {
             }
             HttpResponse<String> response = Unirest.get(nextUrl).header('Authorization', "token ${token}").asString()
             if(response.status == 200) {
-                orgs = JSON.parse(response.body).collect { getOrgDetails(it) }
+                orgs = JSON.parse(response.body).collect getOrgDetails
                 nextUrl = getNext(response)
             } else {
                 log.warn("Unable to fetch ${nextUrl}, due to ${response.status} : ${response.statusText}")
@@ -89,25 +98,31 @@ class GithubService {
         }
     }
 
-    private Map getOrgDetails(String json) {
-        getOrgDetails(JSON.parse(json))
-    }
-
-    private Map getOrgDetails(def json) {
+    private Closure<Map> getOrgDetails = { json ->
+        json = json instanceof String ? JSON.parse(json) : json
         [
-                url: json.url,
-                name: json.login,
-                description: json.description,
-                avatar: json.avatar_url
+                'url': json.url,
+                'name': json.login,
+                'description': json.description,
+                'avatar': json.avatar_url
         ]
     }
 
-    private Map getRepoDetails(def json) {
+    private Closure<Map> getRepoDetails = { json ->
+        json = json instanceof String ? JSON.parse(json) : json
         [
-                owner: json.owner.login,
-                name: json.name,
-                stargazers: json.stargazers_count,
-                forks: json.forks_count,
+                'owner': json.owner.login,
+                'name': json.name,
+                'stargazers': json.stargazers_count,
+                'forks': json.forks_count,
+        ]
+    }
+
+    private Closure<Map> getCommitDetails = { json ->
+        [
+                'sha': json.sha.substring(0,7),
+                'message': json.commit.message,
+                'url': json.html_url
         ]
     }
 }

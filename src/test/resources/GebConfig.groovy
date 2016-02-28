@@ -5,6 +5,12 @@ import org.openqa.selenium.remote.DesiredCapabilities
 
 waiting {
     timeout = 5
+    presets {
+        slow {
+            timeout = 10
+            retryInterval = 0.5
+        }
+    }
 }
 driver = {
 //    new PhantomJSDriver(new DesiredCapabilities())
