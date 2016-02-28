@@ -3,7 +3,7 @@ package com.github.marcoscarceles.repoman
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
+@Transactional
 class OrganizationController {
 
     OrganizationService organizationService

@@ -22,4 +22,9 @@ class OrganizationListPage extends Page {
         organizations.find { it.name == name }
         //This can be extended to go
     }
+
+    OrganizationEntry choose(int index) {
+        organizations[index]
+        //This can be extended to go
+    }
 }
