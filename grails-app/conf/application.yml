@@ -5,6 +5,8 @@ repoman:
         username:   "${GITHUB_USERNAME}"
         password:   "${GITHUB_PASSWORD}"
         token:      "${GITHUB_TOKEN}"
+        clientID:   "${GITHUB_CLIENTID}"
+        secret:     "${GITHUB_SECRET}"
         throttling: 10000
 ---
 ---

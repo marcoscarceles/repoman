@@ -2,6 +2,7 @@ package com.github.marcoscarceles.repoman
 
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
+import com.mashape.unirest.request.GetRequest
 import grails.converters.JSON
 import grails.transaction.Transactional
 
@@ -37,27 +38,60 @@ class GithubService {
     private <T> T get(Closure<T> parsingClosure, String type, String ... path) {
         T value
         String url = API_HOME +'/'+ Paths.get(type, path).toString()
-        HttpResponse<String> response = Unirest.get(url)
-                .header('Authorization', "token ${token}")
-                .asString()
+        HttpResponse<String> response = authenticate(Unirest.get(url)).asString()
         if(response.status == 200) {
+            if(log.debugEnabled) {
+                log.debug("Pending available requests " + response.headers['x-ratelimit-remaining'])
+            }
             def body = JSON.parse(response.body)
             value = body instanceof List ? body.collect(parsingClosure) : parsingClosure.call(body)
         } else {
-            log.warning "Unable to fetch ${url}, response ${response.status} : ${response.statusText}"
+            log.warn "Unable to fetch ${url}, response ${response.status} : ${response.statusText}"
         }
         return value
     }
 
-    protected String getNext(HttpResponse<?> response) {
+    private GetRequest authenticate(GetRequest request) {
+        if(clientID && secret) {
+            request.queryString([
+                    'client_id' : clientID,
+                    'client_secret' : secret
+            ])
+        } else if (username && password) {
+            request.basicAuth(username, password)
+        } else if (token) {
+            request.header('Authorization', "token ${token}")
+        } else { //Hope for the best
+            log.warn "Unable to authenticate request, likely to hit Github rate limit"
+            request
+        }
+    }
+
+    private String getNext(HttpResponse<?> response) {
         String next = response.headers.link.find {
             it =~ /rel="next"/
         }
         next ? (next =~ /<([^>]+)>/)[0][1] : null
     }
 
+    String getClientID() {
+        getConfig('clientID', /GITHUB_CLIENTID/)
+    }
+    String getSecret() {
+        getConfig('clientID', /GITHUB_SECRET/)
+    }
+    String getUsername() {
+        getConfig('username', /GITHUB_USERNAME/)
+    }
+    String getPassword() {
+        getConfig('password', /GITHUB_PASSWORD/)
+    }
     String getToken() {
-        grailsApplication.config.repoman.github.token
+        getConfig('token', /GITHUB_TOKEN/)
+    }
+
+    private getConfig(field, envVariable) {
+        grailsApplication.config.repoman.github[field] =~ envVariable ? null : grailsApplication.config.repoman.github[field]
     }
 
     private class OrganizationIterator implements Iterator<List<Map>> {
@@ -75,7 +109,7 @@ class GithubService {
             if(!hasNext()) {
                 return null
             }
-            HttpResponse<String> response = Unirest.get(nextUrl).header('Authorization', "token ${token}").asString()
+            HttpResponse<String> response = authenticate(Unirest.get(nextUrl)).asString()
             if(response.status == 200) {
                 orgs = JSON.parse(response.body).collect getOrgDetails
                 nextUrl = getNext(response)
