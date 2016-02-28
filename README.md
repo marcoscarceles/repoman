@@ -7,7 +7,7 @@ To run this application you'll need:
  * Grails 3.1.1
  * Java 8
  
-Use the following environment variables to integrate with Github:
+Use one of the following environment variables combinations to integrate with Github:
  * ClientID / Secret based:
    * `GTIHUB_SECRET`
    * `GITHUB_CLIENTID`
