@@ -13,7 +13,7 @@ class GithubService {
 
     def grailsApplication
 
-    private static final API_HOME = 'https://api.github.com'
+    public static final API_HOME = 'https://api.github.com'
 
     Iterator<List<Map>> getAllOrganizations() {
         new OrganizationIterator()
@@ -51,7 +51,7 @@ class GithubService {
         return value
     }
 
-    private GetRequest authenticate(GetRequest request) {
+    GetRequest authenticate(GetRequest request) {
         if(clientID && secret) {
             request.queryString([
                     'client_id' : clientID,

@@ -8,6 +8,9 @@ class Repo {
     int forks
     List<Commit> commits
 
+    Date dateCreated
+    Date lastUpdated
+
     String getFullName() {
         "$owner/$name"
     }
