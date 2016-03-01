@@ -21,4 +21,13 @@ class Organization {
         email nullable: true
         blog nullable: true
     }
+
+    def beforeInsert() {
+        name = name?.toLowerCase()
+    }
+
+    def beforeUpdate() {
+        name = name?.toLowerCase()
+    }
+
 }
