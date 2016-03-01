@@ -10,6 +10,7 @@ import spock.lang.Unroll
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
+@Unroll
 @TestFor(OrganizationService)
 @Mock([Organization, GithubService])
 class OrganizationServiceSpec extends Specification {
@@ -76,7 +77,6 @@ class OrganizationServiceSpec extends Specification {
         orgName << ['Netflix', 'github']
     }
 
-    @Unroll
     void "can fetch a single Organization : #name"() {
         given:
         Organization.findByName(name)?.delete()
@@ -94,5 +94,31 @@ class OrganizationServiceSpec extends Specification {
 
         where:
         name << ['Netflix', 'github']
+    }
+
+    void "searching for #query returns #expected"() {
+        given:
+        Organization.list()*.delete()
+        List<String> orgs = ['github', 'guardian', 'gitana', 'githubhelp', 'microsoft', 'Netflix', 'Netguru', 'NetOffice']
+        orgs.each {
+            service.get(it)
+        }
+
+        expect:
+        Organization.count() == orgs.size()
+
+        when:
+        List<Organization> results = service.search(query,[:])
+
+        then:
+        results*.name*.toLowerCase() as Set == expected*.toLowerCase() as Set
+
+        where:
+        query    || expected
+        'net'    || ['Netflix', 'Netguru', 'NetOffice']
+        'fli'    || []
+        'git'    || ['github', 'gitana', 'githubhelp']
+        'g'      || ['github', 'guardian', 'gitana', 'githubhelp', 'guardian']
+        'google' || ['google']
     }
 }

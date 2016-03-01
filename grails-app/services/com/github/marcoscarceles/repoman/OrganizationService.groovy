@@ -70,6 +70,17 @@ class OrganizationService {
         return Organization.count()
     }
 
+    List<Organization> search(String query, Map params=[:]) {
+        List<Organization> results = Organization.findAllByNameIlike("${query}%", params)
+        if(!results && !params.containsKey('offset')) {
+            Organization org = get(query)
+            if(org) {
+                results = [org]
+            }
+        }
+        return results
+    }
+
     private boolean relevant(def details) {
         details['repoCount'] > minimumRepos  && (details['email'] || details['blog']) //At the very least, no?
     }
