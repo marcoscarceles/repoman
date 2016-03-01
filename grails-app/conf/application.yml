@@ -46,6 +46,8 @@ environments:
         repoman:
             github:
                 throttling: 1000
+            cache:
+                expiry: 1800
 ---
 ---
 grails:
