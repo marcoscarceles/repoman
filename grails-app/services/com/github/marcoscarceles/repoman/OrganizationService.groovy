@@ -1,10 +1,8 @@
 package com.github.marcoscarceles.repoman
 
 import grails.core.GrailsApplication
-import grails.transaction.Transactional
 import groovy.time.TimeCategory
 
-@Transactional
 class OrganizationService {
 
     GithubService githubService
@@ -49,20 +47,29 @@ class OrganizationService {
         while(orgs.hasNext()) {
             List<Map> page = orgs.next()
             //Because we want to flush one page at a time
+            int saved = 0
             Organization.withNewTransaction {
-                page.each {
-                    if(!Organization.findByName(it.name)) {
-                        Organization org = new Organization(it).save()
+                page.each { details ->
+                    details = githubService.getOrganization(details['name'])
+                    if(relevant(details)) { //Otherwise it won't be listed (neither cached)
+                        if(Organization.countByName(details.name) == 0) {
+                            new Organization(details).save()
+                            saved++
+                        }
                     }
                 }
             }
-            log.debug "Saved another ${page.size()} organizations"
+            log.debug "Saved another ${saved} organizations"
             if(throttling) {
                 Thread.sleep(throttling as long)
             }
         }
         log.debug 'All Organizations saved!'
         return Organization.count()
+    }
+
+    private boolean relevant(def details) {
+        details['repoCount'] > minimumRepos  && (details['email'] || details['blog']) //At the very least, no?
     }
 
     def getThrottling() {
@@ -73,4 +80,7 @@ class OrganizationService {
         grailsApplication.config.repoman.cache.expiry
     }
 
+    int getMinimumRepos() {
+        grailsApplication.config.repoman.organization.minimumRepos
+    }
 }

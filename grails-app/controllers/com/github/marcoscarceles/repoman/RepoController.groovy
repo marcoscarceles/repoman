@@ -1,9 +1,7 @@
 package com.github.marcoscarceles.repoman
 
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
 
-@Transactional
 class RepoController {
 
     RepoService repoService

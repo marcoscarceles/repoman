@@ -5,6 +5,9 @@ class Organization {
     String name
     String url
     String avatar
+    int repoCount
+    String email
+    String blog
 
     Date dateCreated
     Date lastUpdated
@@ -14,8 +17,8 @@ class Organization {
     static hasMany = [repos:Repo]
 
     static constraints = {
-        avatar unique:true
         name unique:true
-        url unique:true
+        email nullable: true
+        blog nullable: true
     }
 }
