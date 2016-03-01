@@ -8,6 +8,8 @@ repoman:
         clientID:   "${GITHUB_CLIENTID}"
         secret:     "${GITHUB_SECRET}"
         throttling: 10000
+    cache:
+        expiry: 1800 # Time in seconds that the entries will be stored in the database
 ---
 ---
 hibernate:
@@ -38,6 +40,8 @@ environments:
         repoman:
             github:
                 throttling: 60000
+            cache:
+                expiry: 10
     production:
         repoman:
             github:

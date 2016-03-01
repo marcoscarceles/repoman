@@ -6,6 +6,9 @@ class Organization {
     String url
     String avatar
 
+    Date dateCreated
+    Date lastUpdated
+
     List<Repo> repos
 
     static hasMany = [repos:Repo]

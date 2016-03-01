@@ -2,6 +2,7 @@ package com.github.marcoscarceles.repoman
 
 import grails.core.GrailsApplication
 import grails.transaction.Transactional
+import groovy.time.TimeCategory
 
 @Transactional
 class OrganizationService {
@@ -11,25 +12,35 @@ class OrganizationService {
 
     Organization get(String name) {
         Organization org = Organization.findByName(name)
-        if(!org) {
+        if(!org || !org.repos || org.lastUpdated < use(TimeCategory) { expiry.seconds.ago } ) {
             Map details = githubService.getOrganization(name)
             if(details) {
-                org = new Organization(details).save()
+                if(org) {
+                    org.properties << details
+                } else {
+                    org = new Organization(details)
+                }
+                getRepos(org)
+                org.save()
             }
         }
-
-        if(!org.repos) {
-            org.repos = getRepos(name)
-            org.save()
-        }
-
         return org
     }
 
-    List<Repo> getRepos(String owner) {
-        githubService.getRepos(owner).collect {
-            new Repo(it)
+    List<Repo> getRepos(Organization organization) {
+        List<String> orgRepos = organization.repos*.name
+        githubService.getRepos(organization.name).collect { details ->
+            if(details.name in orgRepos) {
+                organization.repos.find { it.name }.properties << details
+            } else {
+                if(organization.repos == null) {
+                    organization.repos = []
+                }
+                organization.repos << new Repo(details)
+            }
         }
+        organization.save()
+        organization.repos
     }
 
     int saveAllOrganizations() {
@@ -57,4 +68,9 @@ class OrganizationService {
     def getThrottling() {
         grailsApplication.config.repoman.github.throttling
     }
+
+    int getExpiry() {
+        grailsApplication.config.repoman.cache.expiry
+    }
+
 }
