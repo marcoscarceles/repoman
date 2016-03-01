@@ -16,7 +16,6 @@ class Organization {
     static constraints = {
         avatar unique:true
         name unique:true
-        url display: false, unique:true
-        repos display: false
+        url unique:true
     }
 }

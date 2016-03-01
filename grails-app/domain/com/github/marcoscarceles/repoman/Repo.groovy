@@ -35,10 +35,6 @@ class Repo {
     static transients = ['popularity', 'fullName', 'linkParameters', 'commits']
 
     static constraints = {
-        owner display:false
-        name unique:true, display:false
-        popularity display:true
-        stargazers display:false
-        forks display:false
+        name unique:true
     }
 }
