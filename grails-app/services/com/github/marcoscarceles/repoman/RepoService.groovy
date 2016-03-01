@@ -3,6 +3,7 @@ package com.github.marcoscarceles.repoman
 import grails.transaction.Transactional
 import groovy.time.TimeCategory
 
+@Transactional
 class RepoService {
 
     def grailsApplication

@@ -1,8 +1,10 @@
 package com.github.marcoscarceles.repoman
 
 import grails.core.GrailsApplication
+import grails.transaction.Transactional
 import groovy.time.TimeCategory
 
+@Transactional
 class OrganizationService {
 
     GithubService githubService
