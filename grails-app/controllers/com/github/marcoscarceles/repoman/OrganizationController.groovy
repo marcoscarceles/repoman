@@ -25,7 +25,7 @@ class OrganizationController {
         if(!count) {
             redirect action: 'index', params: params
         } else {
-            render view: 'index', model: [organizationList: results, organizationCount: count]
+            render view: 'index', model: [organizationList: results, organizationCount: count, id: id]
         }
     }
 

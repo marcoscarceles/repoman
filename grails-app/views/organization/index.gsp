@@ -21,7 +21,7 @@
             <f:table collection="${organizationList}" properties="${['avatar','name', 'description', 'repoCount']}"/>
 
             <div class="pagination">
-                <g:paginate total="${organizationCount ?: 0}" />
+                <g:paginate total="${organizationCount ?: 0}" id="${id}"/>
             </div>
         </div>
     </body>
