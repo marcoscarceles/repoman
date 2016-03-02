@@ -1,0 +1,4 @@
+/*Introduce SASS*/
+[am-field~="date"] { /* Less markup */
+    white-space: pre;
+}

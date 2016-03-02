@@ -6,6 +6,7 @@ import com.mashape.unirest.request.GetRequest
 import grails.converters.JSON
 
 import java.nio.file.Paths
+import java.time.ZonedDateTime
 
 class GithubService {
 
@@ -143,7 +144,8 @@ class GithubService {
         [
                 'sha': json.sha.substring(0,7),
                 'message': json.commit.message,
-                'url': json.html_url
+                'url': json.html_url,
+                'date' : ZonedDateTime.parse(json.commit.committer.date)
         ]
     }
 }

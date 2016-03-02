@@ -9,7 +9,8 @@ class CommitEntry extends Module {
 
     static content = {
         link { $('td:nth-child(1)') }
-        sha { $('td:nth-child(1)').text() }
-        message { $('td:nth-child(2)').text() }
+        sha { $('td[am-field~="sha"]').text() }
+        date { $('td[am-field~="date"]').text() }
+        message { $('td[am-field~="message"]').text() }
     }
 }
