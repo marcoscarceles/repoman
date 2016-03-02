@@ -1,7 +1,8 @@
 package com.github.marcoscarceles.repoman
 
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+
+import static org.springframework.http.HttpStatus.*
 
 @Transactional
 class RepoController {

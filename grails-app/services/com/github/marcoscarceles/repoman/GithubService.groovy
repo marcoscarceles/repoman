@@ -4,11 +4,9 @@ import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
 import com.mashape.unirest.request.GetRequest
 import grails.converters.JSON
-import grails.transaction.Transactional
 
 import java.nio.file.Paths
 
-@Transactional
 class GithubService {
 
     def grailsApplication
@@ -123,10 +121,12 @@ class GithubService {
 
     private Closure<Map> getOrgDetails = { json ->
         [
-                'url': json.url,
                 'name': json.login,
                 'description': json.description,
-                'avatar': json.avatar_url
+                'avatar': json.avatar_url,
+                'repoCount': json.public_repos as Integer,
+                'email': json.email ?: "",
+                'blog': json.blog ?: ""
         ]
     }
 

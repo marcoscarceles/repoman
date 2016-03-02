@@ -14,7 +14,6 @@ class RepoService {
         get(owner.name, name)
     }
 
-    //TODO: Test BUG due to Controller's @Transacational(readonly=true)
     Repo get(String owner, String name) {
         Repo repo = Repo.findByOwnerAndName(owner, name)
         if(!repo || repo.lastUpdated < use(TimeCategory) { expiry.seconds.ago } ) {

@@ -18,6 +18,14 @@
     border-radius: 0.5em;
 }
 
+.search-box {
+    padding: 1em;
+}
+
+.search-box input[type="text"]{
+    width: 20em;
+}
+
 @media (min-width: 768px) {
     .main.container {
         width: 750px;

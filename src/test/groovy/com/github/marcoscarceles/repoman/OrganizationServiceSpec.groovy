@@ -10,6 +10,7 @@ import spock.lang.Unroll
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
+@Unroll
 @TestFor(OrganizationService)
 @Mock([Organization, GithubService])
 class OrganizationServiceSpec extends Specification {
@@ -76,7 +77,6 @@ class OrganizationServiceSpec extends Specification {
         orgName << ['Netflix', 'github']
     }
 
-    @Unroll
     void "can fetch a single Organization : #name"() {
         given:
         Organization.findByName(name)?.delete()
@@ -93,6 +93,54 @@ class OrganizationServiceSpec extends Specification {
         Organization.countByName(name) == 1
 
         where:
-        name << ['Netflix', 'github']
+        name << ['netflix', 'github']
+    }
+
+    void "searching for #query returns #expected"() {
+        given:
+        List<String> orgs = ['github', 'guardian', 'gitana', 'githubhelp', 'microsoft', 'Netflix', 'Netguru', 'NetOffice']
+        orgs.each {
+            service.get(it)
+        }
+
+        expect:
+        Organization.count() == orgs.size()
+
+        when:
+        List<Organization> results = service.search(query,[:])
+
+        then:
+        results*.name as Set == expected as Set
+
+        where:
+        query    || expected
+        'net'    || ['netflix', 'netguru', 'netoffice']
+        'fli'    || []
+        'git'    || ['github', 'gitana', 'githubhelp']
+        'g'      || ['github', 'guardian', 'gitana', 'githubhelp', 'guardian']
+        'google' || ['google']
+    }
+
+    void "search is paged with #params"() {
+        given:
+        List<String> orgs = ['github', 'guardian', 'gitana', 'githubhelp', 'microsoft', 'Netflix', 'Netguru', 'NetOffice']
+        orgs.each {
+            service.get(it)
+        }
+
+        when:
+        List<Organization> results = service.search('n',params)
+
+        then:
+        results*.name*.toLowerCase() == expected*.toLowerCase()
+
+        where:
+        params                                           || expected
+        [sort: 'name', order: 'asc']                     || ['netflix', 'netguru', 'netOffice']
+        [sort: 'name', order: 'desc']                    || ['netOffice', 'netguru', 'netflix']
+        [sort: 'name', order: 'desc', offset: 1, max: 1] || ['netguru']
+        [sort: 'name', order: 'desc', offset: 1, max: 2] || ['netguru', 'netflix']
+        [sort: 'name', order: 'desc', offset: 2, max: 1] || ['netflix']
+        [sort: 'name', order: 'asc', offset: 2, max: 10] || ['netOffice']
     }
 }

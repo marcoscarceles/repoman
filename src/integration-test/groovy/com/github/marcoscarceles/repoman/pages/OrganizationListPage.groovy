@@ -15,11 +15,14 @@ class OrganizationListPage extends Page {
     }
 
     static content = {
+        searchBox  { $('input.input-search') }
+        searchButton  { $('button.btn-search') }
+        message  { $('.message').text() }
         organizations { moduleList OrganizationEntry, $('#list-organization tbody tr') }
     }
 
     OrganizationEntry choose(String name) {
-        organizations.find { it.name == name }
+        organizations.find { it.name == name.toLowerCase() }
         //This can be extended to go
     }
 
