@@ -3,8 +3,11 @@ package com.github.marcoscarceles.repoman
 class Organization {
 
     String name
-    String url
+    String description
     String avatar
+    Integer repoCount
+    String email
+    String blog
 
     Date dateCreated
     Date lastUpdated
@@ -14,9 +17,19 @@ class Organization {
     static hasMany = [repos:Repo]
 
     static constraints = {
-        avatar unique:true
         name unique:true
-        url display: false, unique:true
-        repos display: false
+        description nullable: true
+        repoCount nullable: true
+        email nullable: true
+        blog nullable: true
     }
+
+    def beforeInsert() {
+        name = name?.toLowerCase()
+    }
+
+    def beforeUpdate() {
+        name = name?.toLowerCase()
+    }
+
 }

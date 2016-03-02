@@ -1,7 +1,7 @@
 environments {
     production {
         dataSource {
-            dbCreate = "update"
+            dbCreate = "create-drop" //Why not, if it's for caching ;)
             driverClassName = "org.postgresql.Driver"
             dialect = org.hibernate.dialect.PostgreSQL82Dialect
             uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")

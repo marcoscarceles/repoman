@@ -3,6 +3,15 @@ body {
     background-size: 100% auto;
 }
 
+input.input-search {
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.btn-search {
+    text-decoration: none;
+}
+
 .avatar {
     height: 4em;
     border-radius: 50%;
