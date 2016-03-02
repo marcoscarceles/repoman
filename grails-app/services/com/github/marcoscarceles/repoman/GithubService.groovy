@@ -121,10 +121,10 @@ class GithubService {
 
     private Closure<Map> getOrgDetails = { json ->
         [
-                'url': json.html_url,
                 'name': json.login,
+                'description': json.description,
                 'avatar': json.avatar_url,
-                'repoCount': (json.public_repos ?: 0) as int,
+                'repoCount': json.public_repos as Integer,
                 'email': json.email ?: "",
                 'blog': json.blog ?: ""
         ]

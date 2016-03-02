@@ -93,7 +93,7 @@ class OrganizationServiceSpec extends Specification {
         Organization.countByName(name) == 1
 
         where:
-        name << ['Netflix', 'github']
+        name << ['netflix', 'github']
     }
 
     void "searching for #query returns #expected"() {

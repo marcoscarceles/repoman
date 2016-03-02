@@ -14,6 +14,21 @@ class OrganizationController {
         respond Organization.list(params), model:[organizationCount: Organization.count()]
     }
 
+    def "search-query"() {
+        redirect(action: 'search', id:params.query, params: params)
+    }
+    def search(String id) {
+        params.max = Math.min((params.max ?: 10) as int, 100)
+        List<Organization> results = organizationService.search(id, params)
+        int count = organizationService.searchCount(id)
+        flash.message = "Your search returned ${count} results"
+        if(!count) {
+            redirect action: 'index', params: params
+        } else {
+            render view: 'index', model: [organizationList: results, organizationCount: count]
+        }
+    }
+
     def show(String id) {
         Organization org = organizationService.get(id)
         if(org && params.sort && params.order) {

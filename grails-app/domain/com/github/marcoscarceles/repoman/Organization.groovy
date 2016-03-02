@@ -3,9 +3,9 @@ package com.github.marcoscarceles.repoman
 class Organization {
 
     String name
-    String url
+    String description
     String avatar
-    int repoCount
+    Integer repoCount
     String email
     String blog
 
@@ -18,6 +18,8 @@ class Organization {
 
     static constraints = {
         name unique:true
+        description nullable: true
+        repoCount nullable: true
         email nullable: true
         blog nullable: true
     }

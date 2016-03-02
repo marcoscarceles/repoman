@@ -28,7 +28,7 @@ class E2ESpec extends GebSpec {
         }
 
         and:
-        organizations[0].name == 'Netflix'
+        organizations[0].name == 'netflix'
     }
 
     @Unroll
@@ -88,5 +88,36 @@ class E2ESpec extends GebSpec {
 
         and:
         commits.size() == 30
+    }
+
+    void "can search organizations"() {
+        given:
+        to OrganizationListPage
+
+        when:
+        searchBox << 'r'
+        searchButton.click()
+        then:
+        at OrganizationListPage
+        message =~ /Your search returned/
+        and:
+        organizations.every { it.name.startsWith('r') }
+
+        when:
+        searchBox << 'pivotal'
+        searchButton.click()
+        then:
+        at OrganizationListPage
+        message =~ /Your search returned 1 results/
+
+        when:
+        searchBox << 'this-cant-really-exist-can-it'
+        searchButton.click()
+        then:
+        at OrganizationListPage
+        message =~ /Your search returned 0 results/
+        and:
+        organizations.size() == 10
+
     }
 }

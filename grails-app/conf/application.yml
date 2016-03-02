@@ -9,7 +9,7 @@ repoman:
         secret:     "${GITHUB_SECRET}"
         throttling: 10000
     organization:
-        minimumRepos: 5 # To consider it relevant
+        minimumRepos: 10 # To consider it relevant
     cache:
         expiry: 1800 # Time in seconds that the entries will be stored in the database
 ---

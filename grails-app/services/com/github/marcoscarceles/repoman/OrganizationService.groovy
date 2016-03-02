@@ -11,7 +11,7 @@ class OrganizationService {
     GrailsApplication grailsApplication
 
     Organization get(String name) {
-        Organization org = Organization.findByName(name)
+        Organization org = Organization.findByName(name.toLowerCase())
         if(!org || !org.repos || org.lastUpdated < use(TimeCategory) { expiry.seconds.ago } ) {
             Map details = githubService.getOrganization(name)
             if(details) {
@@ -39,6 +39,7 @@ class OrganizationService {
                 organization.repos << new Repo(details)
             }
         }
+        organization.repoCount = organization.repos.size()
         organization.save()
         organization.repos
     }
@@ -52,9 +53,11 @@ class OrganizationService {
             int saved = 0
             Organization.withNewTransaction {
                 page.each { details ->
-                    details = githubService.getOrganization(details['name'])
+                    //This extra request is missing the point of caching ...
+                    //details = githubService.getOrganization(details['name'])
                     if(relevant(details)) { //Otherwise it won't be listed (neither cached)
-                        if(Organization.countByName(details.name) == 0) {
+                        String name = (details.name as String)?.toLowerCase()
+                        if(Organization.countByName(name) == 0) {
                             new Organization(details).save()
                             saved++
                         }
@@ -71,7 +74,7 @@ class OrganizationService {
     }
 
     List<Organization> search(String query, Map params=[:]) {
-        List<Organization> results = Organization.findAllByNameIlike("${query}%", params)
+        List<Organization> results = Organization.findAllByNameLike("${query}%", params)
         if(!results && !params.containsKey('offset')) {
             Organization org = get(query)
             if(org) {
@@ -81,8 +84,18 @@ class OrganizationService {
         return results
     }
 
+    int searchCount(String query) {
+        int repos = Organization.countByNameIlike("${query}%")
+        if(!repos) {
+            repos = get(query) ? 1 : 0
+        }
+        return repos
+    }
+
     private boolean relevant(def details) {
-        details['repoCount'] > minimumRepos  && (details['email'] || details['blog']) //At the very least, no?
+//        details['repoCount'] > minimumRepos  && (details['email'] || details['blog']) //At the very least, no?
+//        details['description']
+        true
     }
 
     def getThrottling() {
